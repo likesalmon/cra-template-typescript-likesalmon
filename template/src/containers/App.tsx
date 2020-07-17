@@ -14,9 +14,11 @@ interface AppProps {}
 const App: FunctionComponent<AppProps> = () => {
   return (
     <Container>
-      <Typography component="h1">It works!</Typography>
-      <Typography component="p">
-        This is the app component. If you're seeing this, things are going
+      <Typography component="h1" variant="h1">
+        It works!
+      </Typography>
+      <Typography component="p" variant="body1">
+        This is the App component. If you're seeing this, things are going
         pretty well for you.
       </Typography>
     </Container>
