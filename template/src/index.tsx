@@ -1,7 +1,7 @@
 import React, { FunctionComponent, ReactNode } from "react";
 import ReactDOM from "react-dom";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import App from "./App";
+import App from "./containers/App";
 import * as serviceWorker from "./serviceWorker";
 import { StylesProvider } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/styles";
