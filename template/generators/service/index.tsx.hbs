@@ -1,0 +1,135 @@
+/**
+ * 
+ * {{ properCase name }}
+ * 
+ * use{{ properCase name }} is a custom hook that makes requests for you.
+ * 
+ * Usage
+ * -----
+ * 1. Wrap components that need to make requests or access data
+ * in the Provider:
+ * 
+ * ```
+ * import React from 'react';
+ * import { use{{ properCase name }} } from "../services/{{ properCase name }}";
+ * 
+ * const App = () => {
+ *   // Custom hooks must be initialized in a component.
+ *   const { Provider } = use{{ properCase name }}();
+ * 
+ *   return (
+ *     <Provider>
+ *       <Child />
+ *     </Provider>
+ *   );
+ * }
+ * ```
+ * 
+ * 2. Make a request and display the data in a child component:
+ * 
+ * ```
+ * import React, {useContext, useEffect} from 'react';
+ * import CircularProgress from "@material-ui/core/CircularProgress";
+ * import Alert from "@material-ui/lab/Alert";
+ * import { use{{ properCase name }} } from "../services/{{ properCase name }}";
+ * 
+ * const Child = () => {
+ *   const { Context, makeRequest } = use{{ properCase name }}();
+ *   const { 
+ *     status, 
+ *     Status, 
+ *     data,
+ *     error,
+ *   } = useContext(Context);
+ * 
+ *   // Optionally make a request on load.
+ *   // seEffect(() => {
+ *   //  makeRequest();
+ *   // }, [makeRequest]); // Changes to values passed to this array will trigger the effect.
+ * 
+ *   return (
+ *     <button onClick={() => makeRequest({ params: { foo: 'bar' } })}>Go</button>
+ *     {status === Status.NOT_ASKED ? (
+ *       <div>Click Go</div>
+ *     ) : status === Status.LOADING ? (
+ *       <CircularProgress />
+ *     ) : status === Status.FAILURE ? (
+ *       <Alert severity="error">{error.message}</Alert>
+ *     ) : status === Status.SUCCESS ? (
+ *       <div>{data}</div>
+ *     ): null}
+ *   );
+ * };
+ * ```
+ */
+import React, {
+  useState,
+  ReactNode,
+  FunctionComponent,
+  useCallback,
+} from "react";
+import axios, { AxiosRequestConfig } from "axios";
+
+// Export url for testing
+export const URL = "{{ url }}";
+
+export interface State {
+  status: Status;
+  data?: any;
+  error?: {
+    message: string;
+  };
+}
+export enum Status {
+  NOT_ASKED,
+  LOADING,
+  SUCCESS,
+  FAILURE,
+}
+
+export const use{{ properCase name }} = () => {
+  const initialState: State = {
+    status: Status.NOT_ASKED,
+  };
+  const [state, setState] = useState(initialState);
+
+  /**
+   * Initiate a request.
+   *
+   * Memoize with useCallback so it can
+   * be passed as a dependency to useEffect
+   * to prevent unintended requests.
+   */
+  const makeRequest: (config?: AxiosRequestConfig) => void = useCallback(async (config = {}) => {
+    try {
+      setState({
+        status: Status.LOADING,
+      });
+      const { data } = await axios.{{ lowerCase method }}(URL, config);
+      setState({
+        status: Status.SUCCESS,
+        data,
+      });
+    } catch (error) {
+      setState({
+        status: Status.FAILURE,
+        error: error.toJSON(), // Just save the interesting stuff.
+      });
+    }
+  }, []);
+
+  /**
+   * Pass to useContext(Context) to access state from any component.
+   */
+  const Context = React.createContext(state);
+
+  /**
+   * Wrap the parent component in <Provider> so children can do
+   * useContext(Context).
+   */
+  const Provider: FunctionComponent<{ children: ReactNode }> = ({
+    children,
+  }) => <Context.Provider value={state}>{children}</Context.Provider>;
+
+  return { makeRequest, Provider, Context };
+};

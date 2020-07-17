@@ -1,0 +1,111 @@
+/*
+ *
+ * {{ properCase name }}
+ *
+ */
+import React, { 
+  FunctionComponent,
+  useReducer,
+} from 'react';
+import styled from 'styled-components';
+import Container from "@material-ui/core/Container";
+import Typography from "@material-ui/core/Typography";
+import IconButton from "@material-ui/core/IconButton";
+import AddIcon from "@material-ui/icons/Add";
+import RemoveIcon from "@material-ui/icons/Remove";
+
+/**
+ * ############################################################################
+ *
+ * State
+ *
+ * ############################################################################
+ */
+export interface State {
+  readonly count: number;
+}
+export const initialState: State = {
+  count: 0,
+};
+
+/**
+ * ############################################################################
+ *
+ * Actions
+ *
+ * ############################################################################
+ */
+export enum ActionTypes {
+  INCREMENT,
+  DECREMENT,
+}
+
+interface IncrementAction {
+  type: ActionTypes.INCREMENT;
+}
+export const incrementAction = (): IncrementAction => ({ type: ActionTypes.INCREMENT });
+
+interface DecrementAction {
+  type: ActionTypes.DECREMENT;
+}
+export const decrementAction = (): DecrementAction => ({ type: ActionTypes.DECREMENT });
+
+// Add exhaustiveness checking to the reducer
+type Action = IncrementAction | DecrementAction;
+
+/**
+ * ############################################################################
+ *
+ * Reducer
+ *
+ * ############################################################################
+ */
+export const reducer = (state: State, action: Action): State => {
+  switch (action.type) {
+    case ActionTypes.INCREMENT:
+      return { ...state, count: state.count + 1 };
+    case ActionTypes.DECREMENT:
+      return { ...state, count: state.count - 1 };
+    // No default
+  }
+};
+
+/**
+ * ############################################################################
+ *
+ * Components
+ *
+ * ############################################################################
+ */
+interface {{ properCase name }}Props {
+  title: string;
+}
+
+const {{ properCase name }}: FunctionComponent<{{ properCase name }}Props> = ({title}) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  return (
+    <Container>
+      <Typography variant="h2" component="h1" role="banner">{{ properCase name }}</Typography>
+
+      <IconButton onClick={() => dispatch(incrementAction())} aria-label="increment">
+        <AddIcon />
+      </IconButton>
+      <Total aria-label="total">{state.count as number}</Total>
+      <IconButton onClick={() => dispatch(decrementAction())} aria-label="decrement">
+        <RemoveIcon />
+      </IconButton>
+    </Container>
+  );
+};
+
+export const Total = styled.span`
+  margin: 0 10px;
+`;
+
+export default {{ properCase name }};
+
+
+
+
+

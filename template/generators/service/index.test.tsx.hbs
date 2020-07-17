@@ -1,0 +1,95 @@
+/**
+ *
+ * Tests for {{ properCase name }}
+ *
+ */
+import React, { useContext } from "react";
+import { render, waitForElement, fireEvent } from "@testing-library/react";
+import { rest } from "msw";
+import server from "./mocks/server";
+import { use{{ properCase name }}, URL, Status } from "./{{ properCase name }}";
+import response from "./mocks/{{ camelCase name }}Response";
+
+it("should have an initial state of NOT_ASKED", async () => {
+  const El = () => {
+    const { Provider, Context } = use{{ properCase name }}();
+    const { status } = useContext(Context);
+    return <Provider>{status.toString()}</Provider>;
+  };
+  const { getByText } = render(<El />);
+  expect(getByText(Status.NOT_ASKED.toString())).toBeInTheDocument();
+});
+
+it("should set status to LOADING", async () => {
+  const El = () => {
+    const { makeRequest, Provider, Context } = use{{ properCase name }}();
+    const { status } = useContext(Context);
+    return (
+      <Provider>
+        <button onClick={() => makeRequest()}></button>
+        {status === Status.LOADING && (
+          <span data-testid="status">{status.toString()}</span>
+        )}
+        {status === Status.SUCCESS && <span data-testid="done" />}
+      </Provider>
+    );
+  };
+  const { getByTestId, getByRole } = render(<El />);
+  fireEvent.click(getByRole("button"));
+  const statusEl = await waitForElement(() => getByTestId("status"));
+  expect(statusEl).toHaveTextContent(Status.LOADING.toString());
+  await waitForElement(() => getByTestId("done"));
+});
+
+it("should set status to SUCCESS and provide data", async () => {
+  const El = () => {
+    const { makeRequest, Provider, Context } = use{{ properCase name }}();
+    const { status, data } = useContext(Context);
+    return (
+      <Provider>
+        <button onClick={() => makeRequest()}></button>
+        {status === Status.SUCCESS && (
+          <div>
+            <span data-testid="status">{status.toString()}</span>
+            <span data-testid="data">{JSON.stringify(data)}</span>
+          </div>
+        )}
+      </Provider>
+    );
+  };
+  const { getByRole, getByTestId } = render(<El />);
+  fireEvent.click(getByRole("button"));
+  const [statusEl, dataEl] = await waitForElement(() => [
+    getByTestId("status"),
+    getByTestId("data"),
+  ]);
+  expect(statusEl).toHaveTextContent(Status.SUCCESS.toString());
+  expect(dataEl).toHaveTextContent(JSON.stringify(response));
+});
+
+it("should set status to FAILURE and provide error", async () => {
+  server.use(rest.get(URL, (req, res, ctx) => res(ctx.status(500))));
+  const El = () => {
+    const { makeRequest, Provider, Context } = use{{ properCase name }}();
+    const { status, error } = useContext(Context);
+    return (
+      <Provider>
+        <button onClick={() => makeRequest()}></button>
+        {status === Status.FAILURE && (
+          <div>
+            <span data-testid="status">{status.toString()}</span>
+            <span data-testid="error">{error?.message}</span>
+          </div>
+        )}
+      </Provider>
+    );
+  };
+  const { getByTestId, getByRole } = render(<El />);
+  fireEvent.click(getByRole("button"));
+  const [statusEl, errorEl] = await waitForElement(() => [
+    getByTestId("status"),
+    getByTestId("error"),
+  ]);
+  expect(statusEl).toHaveTextContent(Status.FAILURE.toString());
+  expect(errorEl).toHaveTextContent("Request failed with status code 500");
+});

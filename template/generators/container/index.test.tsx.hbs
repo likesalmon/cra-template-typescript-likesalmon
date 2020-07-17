@@ -1,0 +1,75 @@
+/**
+ *
+ *
+ * Tests for {{ properCase name }}
+ *
+ *
+ */
+import React from "react";
+import { render, fireEvent } from "@testing-library/react";
+import {{ properCase name }}, {
+  State,
+  incrementAction,
+  decrementAction,
+  reducer,
+  Total
+} from "./{{ properCase name }}";
+
+describe("reducer", () => {
+  let state: State;
+
+  beforeEach(() => {
+    state = {
+      count: 0,
+    };
+  });
+
+  it("should increment count", () => {
+    expect(reducer(state, incrementAction())).toEqual({
+      count: 1,
+    });
+  });
+
+  it("should decrement count", () => {
+    expect(reducer(state, decrementAction())).toEqual({
+      count: -1,
+    });
+  });
+});
+
+describe("<{{ properCase name }} />", () => {
+  it("should not log errors in console", () => {
+    const spy = jest.spyOn(global.console, "error");
+    render(<{{ properCase name }} title="{{ properCase name }}" />);
+    expect(spy).not.toHaveBeenCalled();
+  });
+
+  it("should display the title", () => {
+    const { getByRole } = render(<{{ properCase name }} title="{{ properCase name }}" />);
+    expect(getByRole("banner")).toHaveTextContent(/{{ properCase name }}/);
+  });
+
+  it("should increment the count", () => {
+    const { getByLabelText } = render(<{{ properCase name }} title="{{ properCase name }}" />);
+    const increment = getByLabelText("increment");
+    fireEvent.click(increment);
+    fireEvent.click(increment);
+    expect(getByLabelText("total")).toHaveTextContent("2");
+  });
+
+  it("should decrement the count", () => {
+    const { getByLabelText } = render(<{{ properCase name }} title="{{ properCase name }}" />);
+    const decrement = getByLabelText("decrement");
+    fireEvent.click(decrement);
+    fireEvent.click(decrement);
+    expect(getByLabelText("total")).toHaveTextContent("-2");
+  });
+});
+
+describe('<Total />', () => {
+  it("should not log errors in console", () => {
+    const spy = jest.spyOn(global.console, "error");
+    render(<Total />);
+    expect(spy).not.toHaveBeenCalled();
+  });
+});

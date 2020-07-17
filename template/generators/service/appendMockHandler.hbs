@@ -1,0 +1,5 @@
+
+  rest.{{ lowerCase method }}({{ camelCase name }}Url, (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json({{ camelCase name }}Response));
+  }),
+  // [APPEND NEW SERVICE MOCK HANDLER ABOVE] < Needed for generating services seamlessly

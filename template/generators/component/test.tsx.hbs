@@ -1,0 +1,18 @@
+/**
+ *
+ *
+ * Tests for <{{ properCase name }} ?>
+ *
+ *
+ */
+import React from "react";
+import { render } from "@testing-library/react";
+import {{ properCase name }} from "./{{ properCase name }}";
+
+describe("<{{ properCase name }} />", () => {
+  it("should not log errors in console", () => {
+    const spy = jest.spyOn(global.console, "error");
+    render(<{{ properCase name }} />);
+    expect(spy).not.toHaveBeenCalled();
+  });
+});

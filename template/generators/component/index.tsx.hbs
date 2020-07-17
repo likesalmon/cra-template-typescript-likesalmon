@@ -1,0 +1,32 @@
+/**
+*
+*
+* <{{ properCase name }} />
+*
+*
+*/
+{{#if styledComponent}}
+import styled from 'styled-components';
+
+const {{ properCase name }} = styled.div`
+  background-color: red;
+`;
+{{else}}
+import React, { FunctionComponent } from 'react';
+import Container from "@material-ui/core/Container";
+import Typography from "@material-ui/core/Typography";
+
+interface {{ properCase name }}Props {}
+
+const {{ properCase name }}: FunctionComponent<{{ properCase name }}Props> = () =>  {
+  return (
+    <Container>
+      <Typography component="h2" variant="h2">
+        {{ properCase name }}
+      </Typography>
+    </Container>
+  )
+};
+{{/if}}
+
+export default {{ properCase name }};
