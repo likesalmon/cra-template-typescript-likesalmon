@@ -17,6 +17,7 @@
     "url": "https://github.com/likesalmon/cra-template-typescript-likesalmon.git"
   },
   "license": "MIT",
+  "main": "template.json",
   "engines": {
     "node": ">=10"
   },
