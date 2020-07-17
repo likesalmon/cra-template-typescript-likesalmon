@@ -1,0 +1,27 @@
+{
+  "name": "cra-template-typescript-likesalmon",
+  "version": "1.0.0",
+  "keywords": [
+    "react",
+    "create-react-app",
+    "template",
+    "typescript",
+    "material ui",
+    "styled components",
+    "plop",
+    "msw"
+  ],
+  "description": "A custom version of the official Typescript template for Create React App with container/component architecture, Material UI, Styled Components, and Plop templates.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/likesalmon/cra-template-typescript-likesalmon.git"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=10"
+  },
+  "files": [
+    "template",
+    "template.json"
+  ]
+}
